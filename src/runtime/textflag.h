@@ -45,11 +45,13 @@
 // step two: jump to syscall interface address provided by occlum when go
 //           .bin file loaded.
 // <BYTE $0x48; BYTE $0x8d; BYTE $0x0d; BYTE $0x0c; BYTE $0x00; BYTE $0x00; BYTE $0x00>
-// actually is the assembler instruction: lea 0xc(%rip),%rcx
+// actually is the assembler instruction: lea 0xa(%rip),%rcx
 #define SYSCALL_ENHANCE  \
     CMPQ runtime·occlumentry(SB), $0x0  \
-    JBE  10(PC)  \
-    BYTE $0x48; BYTE $0x8d; BYTE $0x0d; BYTE $0x0c; BYTE $0x00; BYTE $0x00; BYTE $0x00  \
+    JBE  12(PC)  \
+    BYTE $0x48; BYTE $0x8d; BYTE $0x0d; BYTE $0x0a; BYTE $0x00; BYTE $0x00; BYTE $0x00  \
     MOVQ runtime·occlumentry(SB), R11  \
     JMP  R11  \
+    PXOR X15, X15  \
+    JMP  2(PC)  \
     SYSCALL
